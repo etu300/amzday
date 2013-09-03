@@ -1,4 +1,5 @@
 class User < ActiveRecord::Base
+  has_many :posts, dependent: :destroy
   
   extend FriendlyId
   friendly_id :name, use: :slugged
@@ -16,6 +17,11 @@ class User < ActiveRecord::Base
 
     has_secure_password
       
+      def feed
+        # This is preliminary. See "Following users" for the full implementation.
+        Post.where("user_id = ?", id)
+      end
+
       def User.new_remember_token
     	SecureRandom.urlsafe_base64
   	  end
